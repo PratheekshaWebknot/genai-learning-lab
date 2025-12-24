@@ -1,0 +1,17 @@
+# Core dependencies for Day 1 Assignment
+# Text Generation Tool
+
+# Transformers and HuggingFace
+transformers>=4.35.0
+torch>=2.0.0
+tokenizers>=0.15.0
+
+# API clients
+openai>=1.3.0
+
+# Environment variables
+python-dotenv>=1.0.0
+
+# Utilities
+requests>=2.31.0
+
