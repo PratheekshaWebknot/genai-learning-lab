@@ -40,6 +40,136 @@ Build a CLI-based text generation tool that:
 
 ---
 
+## 🎬 Real-World Execution Example
+
+The following terminal output demonstrates the tool in action, showcasing the **automatic fallback mechanism** and **error handling** in a real scenario:
+
+```
+PS C:\Users\Webnot\Documents\AI-ML-Training\genai-learning-lab\day-01-genai-foundations> python src/text_generation.py "Atlas, the confimed interstellar object"
+
+============================================================
+Text Generation Tool - Day 1 Assignment
+============================================================
+
+Input prompt: Atlas, the confimed interstellar object
+
+Initializing models...
+Loading HuggingFace model: gpt2...
+`torch_dtype` is deprecated! Use `dtype` instead!
+`torch_dtype` is deprecated! Use `dtype` instead!
+Device set to use cpu
+✓ Model gpt2 loaded successfully!
+✓ OpenAI client initialized (primary) with model: gpt-3.5-turbo
+
+------------------------------------------------------------
+Generating with HuggingFace model...
+------------------------------------------------------------
+
+Temperature: 0.2
+✓ Generated 645 characters
+
+Temperature: 0.7
+✓ Generated 710 characters
+
+Temperature: 1.2
+✓ Generated 688 characters
+
+------------------------------------------------------------
+Generating with OPENAI API model...
+(Fallback to GROQ if needed)
+------------------------------------------------------------
+
+Temperature: 0.2
+
+✗ Primary provider (openai) error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+
+⚠ Primary provider (openai) failed. Attempting fallback to groq...
+✓ Groq client initialized (fallback) with model: llama-3.1-8b-instant
+Retrying with groq (llama-3.1-8b-instant)...
+✓ Fallback succeeded!
+✓ Generated 695 characters
+
+Temperature: 0.7
+✓ Generated 649 characters
+
+Temperature: 1.2
+✓ Generated 686 characters
+
+✓ Outputs saved to: C:\Users\Webnot\Documents\AI-ML-Training\genai-learning-lab\day-01-genai-foundations\outputs\sample_outputs.json
+
+============================================================
+OUTPUT COMPARISON
+============================================================
+
+Input: Atlas, the confimed interstellar object
+
+
+HUGGINGFACE Model:
+------------------------------------------------------------
+
+  temp=0.2:
+  , is a very small, very small object. It is about the size of a small football field. It is about the size of a small football field. It is about the size of a small football field. It is about the si...
+
+  temp=0.7:
+  , was discovered in 2012 by scientists at the University of California, Santa Barbara. The discovery, which will be presented at the Society for the Study of Astronomy Annual Meeting in San Francisco ...
+
+  temp=1.2:
+  that is now a star-like planet orbiting a star-like star, is one of our nearest galaxies, a galaxy the size of Earth that was thought to have exploded in early times only 20 light years after it was l...
+
+API_MODEL Model:
+------------------------------------------------------------
+
+  temp=0.2:
+  Atlas is a confirmed interstellar object that was discovered in 2022. It is a small, icy body that originated from outside our solar system. Here are some key facts about Atlas:
+
+1. **Discovery**: Atl...
+
+  temp=0.7:
+  You're referring to 'Oumuamua, not Atlas. 'Oumuamua is the first confirmed interstellar object to visit our solar system.
+
+'Oumuamua was discovered on October 19, 2017, by a team of astronomers using...
+
+  temp=1.2:
+  Atlas is indeed a confirmed interstellar object, but it is often confused with Oumuamua, another notable interstellar object. However, here's some information about Atlas.
+
+Atlas is an asteroid and in...
+
+============================================================
+Generation complete!
+============================================================
+```
+
+### Key Observations from This Execution
+
+1. **Fallback Mechanism in Action** (See [Fallback Mechanism: Evolution & Implementation](#fallback-mechanism-evolution--implementation)):
+   - OpenAI quota exceeded (429 error) → Automatically detected as retryable error
+   - System seamlessly switched to Groq fallback provider
+   - Generation continued successfully without user intervention
+   - All three temperatures completed using the fallback provider
+
+2. **Error Handling** (See [Error Handling: Before vs After](#error-handling-before-vs-after)):
+   - Error was classified as retryable (`insufficient_quota` matches retryable error patterns)
+   - Clear error messages displayed to user
+   - System recovered automatically without crashing
+   - Subsequent temperature tests used the fallback provider successfully
+
+3. **Model Comparison**:
+   - **HuggingFace (GPT-2)**: Shows repetitive patterns, especially at low temperature (0.2)
+   - **API Model (Groq/Llama-3.1)**: Provides more coherent, factual responses
+   - Temperature variations show different behaviors between models
+
+4. **Production-Ready Behavior**:
+   - System resilience: Continued working despite primary provider failure
+   - User transparency: Clear logging of what happened
+   - No data loss: All outputs saved successfully
+   - Seamless experience: User didn't need to manually intervene
+
+This execution demonstrates the **production-ready fallback mechanism** and **comprehensive error handling** that make this tool suitable for real-world deployment. For detailed explanations, see:
+- [Fallback Mechanism: Evolution & Implementation](#fallback-mechanism-evolution--implementation)
+- [Error Handling: Before vs After](#error-handling-before-vs-after)
+
+---
+
 ## 📚 Topics Covered from Day 1 Curriculum
 
 This assignment directly addresses and implements concepts from **Day 1: GenAI Foundations + NLP + Transformers**:
